@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use clap::{Parser, Subcommand};
-use guildly::{commands, database::Database, GuildEntry, GuildlyHandler};
+use guildly::{GuildEntry, GuildlyHandler, commands, database::Database};
 use serenity::prelude::*;
 
 #[derive(Parser)]
@@ -42,7 +42,8 @@ async fn main() {
             serde_json::to_writer_pretty(std::fs::File::create(file).unwrap(), &entries).unwrap();
         }
         Commands::Import { file } => {
-            let entries: Vec<GuildEntry> = serde_json::from_reader(std::fs::File::open(file).unwrap()).unwrap();
+            let entries: Vec<GuildEntry> =
+                serde_json::from_reader(std::fs::File::open(file).unwrap()).unwrap();
             database.import(&entries).unwrap();
         }
         Commands::Run { token } => {
